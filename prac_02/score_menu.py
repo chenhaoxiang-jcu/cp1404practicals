@@ -1,5 +1,8 @@
 MENU = "(G)et a valid score\n(P)rint result\n(S)how stars\n(Q)uit"
 
+PASS_THRESHOLD = 50
+EXCELLENT_THRESHOLD = 90
+
 
 def main():
     """Menu_driven score determining program with options to print the result and stars."""
@@ -32,9 +35,9 @@ def get_valid_score():
 
 def determine_message(score):
     """Determine the appropriate message based on the score."""
-    if score < 50:
+    if score < PASS_THRESHOLD:
         return "Bad"
-    if score < 90:
+    if score < EXCELLENT_THRESHOLD:
         return "Pass"
     return "Excellent"
 
