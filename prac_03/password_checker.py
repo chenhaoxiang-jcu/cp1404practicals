@@ -5,7 +5,7 @@ Password checker "skeleton" code to help you get started
 
 MIN_LENGTH = 2
 MAX_LENGTH = 6
-IS_SPECIAL_CHARACTER_REQUIRED = False
+IS_SPECIAL_CHARACTER_REQUIRED = True
 SPECIAL_CHARACTERS = "!@#$%^&*()_-=+`~,./'[]<>?{}|\\"
 
 
@@ -30,10 +30,22 @@ def is_valid_password(password):
     if len(password) < MIN_LENGTH or len(password) > MAX_LENGTH:
         return False
 
+    number_of_digit, number_of_lower, number_of_upper = count_normal_character(password)
+    if number_of_lower == 0 or number_of_upper == 0 or number_of_digit == 0:
+        return False
+
+    if IS_SPECIAL_CHARACTER_REQUIRED:
+        number_of_special = count_special_character(password)
+        if number_of_special == 0:
+            return False
+
+    return True
+
+
+def count_normal_character(password):
     number_of_lower = 0
     number_of_upper = 0
     number_of_digit = 0
-    number_of_special = 0
     for character in password:
         if character.islower():
             number_of_lower += 1
@@ -41,17 +53,15 @@ def is_valid_password(password):
             number_of_upper += 1
         if character.isdigit():
             number_of_digit += 1
-    if number_of_lower == 0 or number_of_upper == 0 or number_of_digit == 0:
-        return False
+    return number_of_digit, number_of_lower, number_of_upper
 
-    if IS_SPECIAL_CHARACTER_REQUIRED:
-        for character in password:
-            if character in SPECIAL_CHARACTERS:
-                number_of_special += 1
-        if number_of_special == 0:
-            return False
 
-    return True
+def count_special_character(password):
+    number_of_special = 0
+    for character in password:
+        if character in SPECIAL_CHARACTERS:
+            number_of_special += 1
+    return number_of_special
 
 
 main()
