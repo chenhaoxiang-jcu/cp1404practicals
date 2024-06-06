@@ -9,17 +9,19 @@ The price should be displayed to the nearest cent (e.g. $33.59, not $33.59182329
 """
 import random
 
-MAX_INCREASE = 0.1  # 10%
+MAX_INCREASE = 0.175  # 17.5%
 MAX_DECREASE = 0.05  # 5%
-MIN_PRICE = 0.01
-MAX_PRICE = 1000.0
+MIN_PRICE = 1.0
+MAX_PRICE = 100.0
 INITIAL_PRICE = 10.0
+FILENAME = "capitalist_conrad.txt"
 
 number_of_days = 0
 
 price = INITIAL_PRICE
 print(f"${price:,.2f}")
 
+out_file = open(FILENAME, "w")
 while MIN_PRICE <= price <= MAX_PRICE:
     price_change = 0
     # generate a random integer of 1 or 2
@@ -36,3 +38,6 @@ while MIN_PRICE <= price <= MAX_PRICE:
 
     price *= (1 + price_change)
     print(f"On day {number_of_days} price is: ${price:,.2f}")
+    print(f"On day {number_of_days} price is: ${price:,.2f}", file=out_file)
+
+out_file.close()
