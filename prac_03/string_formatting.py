@@ -5,6 +5,7 @@ Various examples of using Python string formatting.
 Want to read more about it?
 https://docs.python.org/3/library/string.html#formatstrings
 """
+BASE_NUMBER = 2
 
 name = "Gibson L-5 CES"
 year = 1922
@@ -50,4 +51,4 @@ print(f"{year} {name} for about ${cost:,.0f}!")
 # 2 ^ 9 is  512
 # 2 ^10 is 1024
 for i in range(11):
-    print(f"2 ^{i:2} is {2 ** i:4}")
+    print(f"2 ^{i:2} is {BASE_NUMBER ** i:4}")
