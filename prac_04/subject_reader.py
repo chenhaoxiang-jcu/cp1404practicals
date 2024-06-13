@@ -39,8 +39,8 @@ def display_information(data):
 
 def determine_aligning_length(data):
     """Determine the length of the text alignment of name and number of student."""
-    max_name_length = max([len(part[1]) for part in data])
-    max_number_length = max([len(str(part[2])) for part in data])
+    max_name_length = max(len(part[1]) for part in data)
+    max_number_length = max(len(str(part[2])) for part in data)
     return max_name_length, max_number_length
 
 
