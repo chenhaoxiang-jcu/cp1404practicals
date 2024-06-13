@@ -17,7 +17,7 @@ def main():
 
 
 def display_report(incomes):
-    """Display cumulative income report"""
+    """Display cumulative income report based on incomes."""
     print("\nIncome Report\n-------------")
     total = 0
     for i, income in enumerate(incomes, 1):
