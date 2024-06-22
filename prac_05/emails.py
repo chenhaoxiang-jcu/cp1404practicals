@@ -11,7 +11,7 @@ def main():
     email = input('Email: ')
     while email != '':
         name = extract_name(email)
-        name_check = input(f"Is your name {name}? (Y/n) ").upper()
+        name_check = input(f"Is your name {name}? (Y/N) ").upper()
         if name_check != 'Y' and name_check != '':
             name = input('Name: ')
         email_to_name[email] = name
