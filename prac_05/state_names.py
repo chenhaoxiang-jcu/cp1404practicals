@@ -16,7 +16,8 @@ while state_code != "":
         print("Invalid short state")
     state_code = input("Enter short state: ").upper()
 
-abbreviation_width = max(len(code) for code in CODE_TO_NAME.keys())
+code_width = max(len(code) for code in CODE_TO_NAME.keys())
 
 for code, name in CODE_TO_NAME.items():
-    print(f"{code:{abbreviation_width}} is {name}")
+    print(f"{code:{code_width}} is {name}")
+
