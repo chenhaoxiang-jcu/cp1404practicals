@@ -29,7 +29,7 @@ def main():
         elif choice == 'A':
             pass
         elif choice == 'U':
-            pass
+            update_projects(projects)
         else:
             print("Invalid menu choice")
         print(MENU)
@@ -58,6 +58,7 @@ def save_projects(projects, filename):
 def load_new_projects():
     filename = input("Filename to load: ")
     projects = load_projects(filename)
+    projects.sort()
     return projects
 
 
@@ -83,6 +84,47 @@ def display_projects(projects):
         print("Completed projects: ")
         for project in sorted(completed_projects):
             print(f'  {project}')
+
+
+def update_projects(projects):
+    if not projects:
+        print("No projects to update")
+    else:
+        for i, project in enumerate(projects):
+            print(f"{i} {project}")
+
+        while True:
+            try:
+                project_index = int(input("Project choice: "))
+                while project_index not in range(len(projects)):
+                    print("Invalid index")
+                    project_index = int(input("Project choice: "))
+                break
+            except ValueError:
+                print("Invalid input - please enter a valid number")
+        print(projects[project_index])
+
+        try:
+            if projects[project_index].is_completed():
+                print("Project already completed")
+            else:
+                new_percentage = int(input("New Percentage: "))
+                while new_percentage <= projects[project_index].completion_percentage or new_percentage > 100:
+                    print(f"New percentage should be greater than {projects[project_index].completion_percentage}, "
+                          f"up to 100")
+                    new_percentage = int(input("New Percentage: "))
+                projects[project_index].update_percentage(new_percentage)
+        except ValueError:
+            pass
+
+        try:
+            new_priority = int(input("New Priority: "))
+            while new_priority <= 0:
+                print("Invalid priority")
+                new_priority = int(input("New Priority: "))
+            projects[project_index].update_priority(new_priority)
+        except ValueError:
+            pass
 
 
 main()
