@@ -19,11 +19,11 @@ def main():
     choice = input(">>> ").upper()
     while choice != 'Q':
         if choice == 'L':
-            pass
+            projects = load_new_projects()
         elif choice == 'S':
-            pass
+            proceed_saving_task(projects)
         elif choice == 'D':
-            pass
+            display_projects(projects)
         elif choice == 'F':
             pass
         elif choice == 'A':
@@ -45,3 +45,44 @@ def load_projects(filename):
             project = Project(parts[0], parts[1], int(parts[2]), float(parts[3]), int(parts[4]))
             projects.append(project)
     return projects
+
+
+def save_projects(projects, filename):
+    with open(filename, 'w') as out_file:
+        out_file.write("Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage")
+        for project in projects:
+            out_file.write(f"{project.name}\t{project.start_date}\t{project.priority}\t"
+                           f"{project.cost_estimate}\t{project.completion_percentage}\n")
+
+
+def load_new_projects():
+    filename = input("Filename to load: ")
+    projects = load_projects(filename)
+    return projects
+
+
+def proceed_saving_task(projects):
+    filename = input("Filename to save: ")
+    save_projects(projects, filename)
+
+
+def display_projects(projects):
+    if not projects:
+        print("No projects to display")
+    else:
+        completed_projects = []
+        incomplete_projects = []
+        for project in projects:
+            if project.is_completed():
+                completed_projects.append(project)
+            else:
+                incomplete_projects.append(project)
+        print("Incomplete projects: ")
+        for project in sorted(incomplete_projects):
+            print(f'  {project}')
+        print("Completed projects: ")
+        for project in sorted(completed_projects):
+            print(f'  {project}')
+
+
+main()
