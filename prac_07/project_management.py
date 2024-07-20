@@ -37,6 +37,10 @@ def main():
             print("Invalid menu choice")
         print(MENU)
         choice = input(">>> ").upper()
+    save_choice = input("Would you like to save to projects.txt? ").upper()
+    if save_choice == 'Y':
+        save_projects(projects, FILENAME)
+    print("Thank you for using custom-built project management software.")
 
 
 def load_projects(filename):
@@ -52,10 +56,11 @@ def load_projects(filename):
 
 def save_projects(projects, filename):
     with open(filename, 'w') as out_file:
-        out_file.write("Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage")
+        out_file.write("Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage\n")
         for project in projects:
             out_file.write(f"{project.name}\t{project.start_date}\t{project.priority}\t"
                            f"{project.cost_estimate}\t{project.completion_percentage}\n")
+    print(f"Saved {len(projects)} projects to {filename}")
 
 
 def load_new_projects():
