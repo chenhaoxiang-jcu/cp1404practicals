@@ -27,7 +27,7 @@ def main():
         elif choice == 'F':
             pass
         elif choice == 'A':
-            pass
+            add_project(projects)
         elif choice == 'U':
             update_projects(projects)
         else:
@@ -84,6 +84,30 @@ def display_projects(projects):
         print("Completed projects: ")
         for project in sorted(completed_projects):
             print(f'  {project}')
+
+
+def add_project(projects):
+    print("Let's add a new project")
+    name = input("Name: ")
+    start_date = input("Start date (dd/mm/yy): ")
+    priority = get_valid_number("Priority: ", int, 1, 999)
+    cost_estimate = get_valid_number("Cost estimate: ", float, 0.0, 999999999.9)
+    completion_percentage = get_valid_number("Percent complete: ", int, 0, 100)
+    project = Project(name, start_date, priority, cost_estimate, completion_percentage)
+    projects.append(project)
+
+
+def get_valid_number(prompt, number_type, minimum, maximum):
+    while True:
+        try:
+            number = number_type(input(prompt))
+            if number < minimum or number > maximum:
+                print(f"Number must be between {minimum} and {maximum} inclusive.")
+            else:
+                break
+        except ValueError:
+            print("Invalid input")
+    return number
 
 
 def update_projects(projects):
