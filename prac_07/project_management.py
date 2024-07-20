@@ -23,6 +23,7 @@ MAXIMUM_COST = 999999999.9
 
 
 def main():
+    """Menu-driven project management software with options to load, save, display, filter, add, and update projects."""
     print("Welcome to Pythonic Project Management")
     projects = load_projects(FILENAME)
     print(f"Loaded {len(projects)} projects from {FILENAME}")
@@ -52,6 +53,7 @@ def main():
 
 
 def load_projects(filename):
+    """Load projects from a file."""
     projects = []
     with open(filename, 'r') as in_file:
         in_file.readline()
@@ -63,6 +65,7 @@ def load_projects(filename):
 
 
 def save_projects(projects, filename):
+    """Save projects to a file."""
     with open(filename, 'w') as out_file:
         out_file.write("Name\tStart Date\tPriority\tCost Estimate\tCompletion Percentage\n")
         for project in projects:
@@ -72,17 +75,20 @@ def save_projects(projects, filename):
 
 
 def load_new_projects():
+    """Load projects from a file that user input."""
     filename = input("Filename to load: ")
     projects = load_projects(filename)
     return projects
 
 
 def proceed_saving_task(projects):
+    """Save projects to a file that user input."""
     filename = input("Filename to save: ")
     save_projects(projects, filename)
 
 
 def display_projects(projects):
+    """Display priority-sorted incomplete and completed projects separately."""
     if not projects:
         print("No projects to display")
     else:
@@ -102,6 +108,7 @@ def display_projects(projects):
 
 
 def filter_projects(projects):
+    """Ask the user for a date and display only projects that start after that date, sorted by date."""
     date_string = get_valid_date("Show projects that start after date (dd/mm/yy): ")
     date = datetime.datetime.strptime(date_string, DATE_FORMAT).date()
 
@@ -118,6 +125,7 @@ def filter_projects(projects):
 
 
 def get_valid_date(prompt):
+    """Get valid date with specific format."""
     while True:
         try:
             date_string = input(prompt)
@@ -129,6 +137,7 @@ def get_valid_date(prompt):
 
 
 def add_project(projects):
+    """Ask the user for the inputs and add a new project to memory."""
     print("Let's add a new project")
     name = input("Name: ")
     start_date = get_valid_date("Start date (dd/mm/yy): ")
@@ -140,6 +149,7 @@ def add_project(projects):
 
 
 def get_valid_number(prompt, number_type, minimum, maximum):
+    """Validate the number user input."""
     while True:
         try:
             number = number_type(input(prompt))
@@ -153,6 +163,7 @@ def get_valid_number(prompt, number_type, minimum, maximum):
 
 
 def update_projects(projects):
+    """Choose a project, then modify the completion % and/or priority - leave blank to retain existing values"""
     if not projects:
         print("No projects to update")
     else:
