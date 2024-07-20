@@ -9,9 +9,17 @@ from operator import attrgetter
 
 from prac_07.project import Project
 
+
 FILENAME = 'projects.txt'
 MENU = ('- (L)oad projects\n- (S)ave projects\n- (D)isplay projects\n- (F)ilter projects by date\n'
         '- (A)dd new project\n- (U)pdate project\n- (Q)uit')
+DATE_FORMAT = '%d/%m/%Y'
+LOWEST_PRIORITY = 1
+HIGHEST_PRIORITY = 9
+MINIMUM_PERCENTAGE = 0
+MAXIMUM_PERCENTAGE = 100
+MINIMUM_COST = 0.0
+MAXIMUM_COST = 999999999.9
 
 
 def main():
@@ -66,7 +74,6 @@ def save_projects(projects, filename):
 def load_new_projects():
     filename = input("Filename to load: ")
     projects = load_projects(filename)
-    projects.sort()
     return projects
 
 
@@ -96,17 +103,17 @@ def display_projects(projects):
 
 def filter_projects(projects):
     date_string = get_valid_date("Show projects that start after date (dd/mm/yy): ")
-    date = datetime.datetime.strptime(date_string, '%d/%m/%Y').date()
+    date = datetime.datetime.strptime(date_string, DATE_FORMAT).date()
 
     filtered_projects = [project for project in projects
-                         if datetime.datetime.strptime(project.start_date, '%d/%m/%Y').date() >= date]
+                         if datetime.datetime.strptime(project.start_date, DATE_FORMAT).date() >= date]
 
     for filtered_project in filtered_projects:
-        filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, '%d/%m/%Y').date()
+        filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, DATE_FORMAT).date()
     filtered_projects.sort(key=attrgetter('start_date'))
 
     for filtered_project in filtered_projects:
-        filtered_project.start_date = filtered_project.start_date.strftime('%d/%m/%Y')
+        filtered_project.start_date = filtered_project.start_date.strftime(DATE_FORMAT)
         print(filtered_project)
 
 
@@ -114,7 +121,7 @@ def get_valid_date(prompt):
     while True:
         try:
             date_string = input(prompt)
-            datetime.datetime.strptime(date_string, '%d/%m/%Y').date()
+            datetime.datetime.strptime(date_string, DATE_FORMAT).date()
             break
         except ValueError:
             print("Invalid date format")
@@ -125,9 +132,9 @@ def add_project(projects):
     print("Let's add a new project")
     name = input("Name: ")
     start_date = get_valid_date("Start date (dd/mm/yy): ")
-    priority = get_valid_number("Priority: ", int, 1, 999)
-    cost_estimate = get_valid_number("Cost estimate: $", float, 0.0, 999999999.9)
-    completion_percentage = get_valid_number("Percent complete: ", int, 0, 100)
+    priority = get_valid_number("Priority: ", int, LOWEST_PRIORITY, HIGHEST_PRIORITY)
+    cost_estimate = get_valid_number("Cost estimate: $", float, MINIMUM_COST, MAXIMUM_COST)
+    completion_percentage = get_valid_number("Percent complete: ", int, MINIMUM_PERCENTAGE, MAXIMUM_PERCENTAGE)
     project = Project(name, start_date, priority, cost_estimate, completion_percentage)
     projects.append(project)
 
@@ -163,23 +170,24 @@ def update_projects(projects):
                 print("Invalid input - please enter a valid number")
         print(projects[project_index])
 
-        try:
-            if projects[project_index].is_completed():
-                print("Project already completed")
-            else:
+        if projects[project_index].is_completed():
+            print("Project already completed")
+        else:
+            try:
                 new_percentage = int(input("New Percentage: "))
-                while new_percentage <= projects[project_index].completion_percentage or new_percentage > 100:
+                while (new_percentage <= projects[project_index].completion_percentage
+                       or new_percentage > MAXIMUM_PERCENTAGE):
                     print(f"New percentage should be greater than {projects[project_index].completion_percentage}, "
                           f"up to 100")
                     new_percentage = int(input("New Percentage: "))
                 projects[project_index].update_percentage(new_percentage)
-        except ValueError:
-            pass
+            except ValueError:
+                pass
 
         try:
             new_priority = int(input("New Priority: "))
-            while new_priority <= 0:
-                print("Invalid priority")
+            while new_priority < LOWEST_PRIORITY or new_priority > HIGHEST_PRIORITY:
+                print(f"Invalid priority,should be {LOWEST_PRIORITY} - {HIGHEST_PRIORITY}")
                 new_priority = int(input("New Priority: "))
             projects[project_index].update_priority(new_priority)
         except ValueError:
