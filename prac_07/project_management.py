@@ -4,6 +4,9 @@ Estimate: 60 minutes
 Actual:   -- minutes
 """
 
+import datetime
+from operator import attrgetter
+
 from prac_07.project import Project
 
 FILENAME = 'projects.txt'
@@ -25,7 +28,7 @@ def main():
         elif choice == 'D':
             display_projects(projects)
         elif choice == 'F':
-            pass
+            filter_projects(projects)
         elif choice == 'A':
             add_project(projects)
         elif choice == 'U':
@@ -86,12 +89,39 @@ def display_projects(projects):
             print(f'  {project}')
 
 
+def filter_projects(projects):
+    date_string = get_valid_date("Show projects that start after date (dd/mm/yy): ")
+    date = datetime.datetime.strptime(date_string, '%d/%m/%Y').date()
+
+    filtered_projects = [project for project in projects
+                         if datetime.datetime.strptime(project.start_date, '%d/%m/%Y').date() >= date]
+
+    for filtered_project in filtered_projects:
+        filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, '%d/%m/%Y').date()
+    filtered_projects.sort(key=attrgetter('start_date'))
+
+    for filtered_project in filtered_projects:
+        filtered_project.start_date = filtered_project.start_date.strftime('%d/%m/%Y')
+        print(filtered_project)
+
+
+def get_valid_date(prompt):
+    while True:
+        try:
+            date_string = input(prompt)
+            datetime.datetime.strptime(date_string, '%d/%m/%Y').date()
+            break
+        except ValueError:
+            print("Invalid date format")
+    return date_string
+
+
 def add_project(projects):
     print("Let's add a new project")
     name = input("Name: ")
-    start_date = input("Start date (dd/mm/yy): ")
+    start_date = get_valid_date("Start date (dd/mm/yy): ")
     priority = get_valid_number("Priority: ", int, 1, 999)
-    cost_estimate = get_valid_number("Cost estimate: ", float, 0.0, 999999999.9)
+    cost_estimate = get_valid_number("Cost estimate: $", float, 0.0, 999999999.9)
     completion_percentage = get_valid_number("Percent complete: ", int, 0, 100)
     project = Project(name, start_date, priority, cost_estimate, completion_percentage)
     projects.append(project)
