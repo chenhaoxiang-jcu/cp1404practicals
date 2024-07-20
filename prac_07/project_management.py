@@ -1,14 +1,13 @@
 """
 Project Management
 Estimate: 60 minutes
-Actual:   -- minutes
+Actual:   around 5-6 hours
 """
 
 import datetime
 from operator import attrgetter
 
 from prac_07.project import Project
-
 
 FILENAME = 'projects.txt'
 MENU = ('- (L)oad projects\n- (S)ave projects\n- (D)isplay projects\n- (F)ilter projects by date\n'
@@ -184,25 +183,34 @@ def update_projects(projects):
         if projects[project_index].is_completed():
             print("Project already completed")
         else:
-            try:
-                new_percentage = int(input("New Percentage: "))
-                while (new_percentage <= projects[project_index].completion_percentage
-                       or new_percentage > MAXIMUM_PERCENTAGE):
-                    print(f"New percentage should be greater than {projects[project_index].completion_percentage}, "
-                          f"up to 100")
-                    new_percentage = int(input("New Percentage: "))
-                projects[project_index].update_percentage(new_percentage)
-            except ValueError:
-                pass
+            while True:
+                try:
+                    new_percentage = input("New Percentage: ")
+                    if new_percentage != '':
+                        new_percentage = int(new_percentage)
+                        if (new_percentage <= projects[project_index].completion_percentage
+                                or new_percentage > MAXIMUM_PERCENTAGE):
+                            raise ValueError
+                        else:
+                            projects[project_index].update_percentage(new_percentage)
+                    break
+                except ValueError:
+                    print(f"Invalid percentage, "
+                          f"new percentage should be greater than {projects[project_index].completion_percentage}, "
+                          f"up to {MAXIMUM_PERCENTAGE}")
 
-        try:
-            new_priority = int(input("New Priority: "))
-            while new_priority < LOWEST_PRIORITY or new_priority > HIGHEST_PRIORITY:
-                print(f"Invalid priority,should be {LOWEST_PRIORITY} - {HIGHEST_PRIORITY}")
-                new_priority = int(input("New Priority: "))
-            projects[project_index].update_priority(new_priority)
-        except ValueError:
-            pass
+        while True:
+            try:
+                new_priority = input("New Priority: ")
+                if new_priority != '':
+                    new_priority = int(new_priority)
+                    if new_priority < LOWEST_PRIORITY or new_priority > HIGHEST_PRIORITY:
+                        raise ValueError
+                    else:
+                        projects[project_index].update_priority(new_priority)
+                break
+            except ValueError:
+                print(f"Invalid priority,should be a number and between {LOWEST_PRIORITY} - {HIGHEST_PRIORITY}.")
 
 
 main()
