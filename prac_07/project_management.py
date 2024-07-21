@@ -30,7 +30,7 @@ def main():
     choice = input(">>> ").upper()
     while choice != 'Q':
         if choice == 'L':
-            projects = load_new_projects()
+            load_new_projects(projects)
         elif choice == 'S':
             proceed_saving_task(projects)
         elif choice == 'D':
@@ -73,11 +73,17 @@ def save_projects(projects, filename):
     print(f"Saved {len(projects)} projects to {filename}")
 
 
-def load_new_projects():
-    """Load projects from a file that user input."""
-    filename = input("Filename to load: ")
-    projects = load_projects(filename)
-    return projects
+def load_new_projects(projects):
+    """Load other projects from a file that user input, add into existing projects."""
+    while True:
+        try:
+            filename = input("Filename to load: ")
+            new_projects = load_projects(filename)
+            break
+        except FileNotFoundError:
+            print("File not found, please enter a valid filename.")
+    projects += new_projects
+    print(f"Loaded {len(new_projects)} projects from {filename}, total {len(projects)} projects now.")
 
 
 def proceed_saving_task(projects):
@@ -108,19 +114,22 @@ def display_projects(projects):
 
 def filter_projects(projects):
     """Ask the user for a date and display only projects that start after that date, sorted by date."""
-    date_string = get_valid_date("Show projects that start after date (dd/mm/yy): ")
-    date = datetime.datetime.strptime(date_string, DATE_FORMAT).date()
+    if not projects:
+        print("No projects to filter")
+    else:
+        date_string = get_valid_date("Show projects that start after date (dd/mm/yy): ")
+        date = datetime.datetime.strptime(date_string, DATE_FORMAT).date()
 
-    filtered_projects = [project for project in projects
-                         if datetime.datetime.strptime(project.start_date, DATE_FORMAT).date() >= date]
+        filtered_projects = [project for project in projects
+                             if datetime.datetime.strptime(project.start_date, DATE_FORMAT).date() >= date]
 
-    for filtered_project in filtered_projects:
-        filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, DATE_FORMAT).date()
-    filtered_projects.sort(key=attrgetter('start_date'))
+        for filtered_project in filtered_projects:
+            filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, DATE_FORMAT).date()
+        filtered_projects.sort(key=attrgetter('start_date'))
 
-    for filtered_project in filtered_projects:
-        filtered_project.start_date = filtered_project.start_date.strftime(DATE_FORMAT)
-        print(filtered_project)
+        for filtered_project in filtered_projects:
+            filtered_project.start_date = filtered_project.start_date.strftime(DATE_FORMAT)
+            print(filtered_project)
 
 
 def get_valid_date(prompt):
