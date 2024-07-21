@@ -104,12 +104,20 @@ def display_projects(projects):
                 completed_projects.append(project)
             else:
                 incomplete_projects.append(project)
+
         print("Incomplete projects: ")
-        for project in sorted(incomplete_projects):
-            print(f'  {project}')
+        if not incomplete_projects:
+            print("  All projects have been completed.")
+        else:
+            for project in sorted(incomplete_projects):
+                print(f'  {project}')
+
         print("Completed projects: ")
-        for project in sorted(completed_projects):
-            print(f'  {project}')
+        if not completed_projects:
+            print("  No project has been completed yet.")
+        else:
+            for project in sorted(completed_projects):
+                print(f'  {project}')
 
 
 def filter_projects(projects):
@@ -123,13 +131,17 @@ def filter_projects(projects):
         filtered_projects = [project for project in projects
                              if datetime.datetime.strptime(project.start_date, DATE_FORMAT).date() >= date]
 
-        for filtered_project in filtered_projects:
-            filtered_project.start_date = datetime.datetime.strptime(filtered_project.start_date, DATE_FORMAT).date()
-        filtered_projects.sort(key=attrgetter('start_date'))
+        if not filtered_projects:
+            print(f"No project starts after {date_string}")
+        else:
+            for filtered_project in filtered_projects:
+                filtered_project.start_date = (
+                    datetime.datetime.strptime(filtered_project.start_date, DATE_FORMAT).date())
+            filtered_projects.sort(key=attrgetter('start_date'))
 
-        for filtered_project in filtered_projects:
-            filtered_project.start_date = filtered_project.start_date.strftime(DATE_FORMAT)
-            print(filtered_project)
+            for filtered_project in filtered_projects:
+                filtered_project.start_date = filtered_project.start_date.strftime(DATE_FORMAT)
+                print(filtered_project)
 
 
 def get_valid_date(prompt):
