@@ -5,14 +5,14 @@ print(red_taxi)
 
 red_taxi.drive(50)
 print(red_taxi)
-print(red_taxi.get_fare())
+print(f"Current fare: ${red_taxi.get_fare():.2f}")
 
 red_taxi.start_fare()
 print(red_taxi)
-print(red_taxi.get_fare())
+print(f"Current fare: ${red_taxi.get_fare():.2f}")
 
-red_taxi.drive(30)
+red_taxi.drive(12)
 print(red_taxi)
-print(red_taxi.get_fare())
+print(f"Current fare: ${red_taxi.get_fare():.2f}")
 
-print(red_taxi.fuel)  # remained fuel should be 20
+print(f"Remained fuel: {red_taxi.fuel}")
