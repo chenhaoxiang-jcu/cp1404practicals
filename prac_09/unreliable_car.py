@@ -12,10 +12,10 @@ class UnreliableCar(Car):
 
     def __str__(self):
         """Return a string like a Car but with current fare distance."""
-        return f"{super().__str__()}, have {self.reliability} chance to drive the car."
+        return f"{super().__str__()}, have {self.reliability}% chance to drive the car."
 
     def drive(self, distance):
-        """Drive like parent Car but only when a random number is greater than or equal to reliability."""
+        """Drive like parent Car but only when a random number is less than reliability."""
         distance_driven = 0
         if uniform(0, 100) < self.reliability:
             distance_driven = super().drive(distance)
