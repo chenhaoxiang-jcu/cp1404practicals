@@ -1,3 +1,5 @@
+"""Band class"""
+
 from musician import Musician
 
 

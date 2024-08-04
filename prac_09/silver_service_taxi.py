@@ -1,8 +1,10 @@
+"""Taxi class"""
+
 from prac_09.taxi import Taxi
 
 
 class SilverServiceTaxi(Taxi):
-    """Specialised version of a Taxi."""
+    """Specialised version of a Taxi that includes fanciness."""
     flagfall = 4.5
 
     def __init__(self, name: str, fuel: float, fanciness: float):

@@ -1,3 +1,5 @@
+"""Car class"""
+
 from random import uniform
 
 from prac_09.car import Car
